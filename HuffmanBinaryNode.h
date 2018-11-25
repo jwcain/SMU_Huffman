@@ -11,11 +11,13 @@ private:
 	HuffmanBinaryNode* left;
 	HuffmanBinaryNode* right;
 	unsigned long frequency;
+	int id;
+	static int ID;
 public:
 	//A traversal operation is a function pointer used to allow for a method to be called on all nodes
 	//across a traversal. The method is called per node in order
 	typedef void (*traversal_operation)(HuffmanBinaryNode* node);
-
+	int GetID();
 	bool IsLeaf();
 	unsigned long GetFrequency();
 	void SetFrequency(unsigned long frequencyValue);
@@ -30,6 +32,7 @@ public:
 	HuffmanBinaryNode(bool isLeafValue);
 	~HuffmanBinaryNode();
 	
+	static void Print(HuffmanBinaryNode* node);
 	static std::vector<int> Pack(HuffmanBinaryNode* node);
 	static HuffmanBinaryNode* Unpack(std::vector<int> n);
 	static void PostOrderOperation(HuffmanBinaryNode* head, traversal_operation opr);
