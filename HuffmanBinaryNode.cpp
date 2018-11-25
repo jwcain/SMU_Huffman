@@ -99,6 +99,7 @@ HuffmanBinaryNode::~HuffmanBinaryNode() {
 //</summary>
 std::vector<int> HuffmanBinaryNode::Pack(HuffmanBinaryNode* node){
 	std::vector<int> ret;
+	//[TODO] Figure out what this means
 	return ret;
 }
 
@@ -106,13 +107,20 @@ std::vector<int> HuffmanBinaryNode::Pack(HuffmanBinaryNode* node){
 // Recreates a node from binary save
 //</summary>
 HuffmanBinaryNode* HuffmanBinaryNode::Unpack(std::vector<int> n){
+	//[TODO] Figure out what this means
 	return 0;
 }
 
 //<summary>
-// 
+// Calls an operation on all nodes in depth first, post order fashion
 //</summary>
-void HuffmanBinaryNode::PostOrderOperation(HuffmanBinaryNode* head, traversal_operation opr){
-	
+void HuffmanBinaryNode::PostOrderOperation(HuffmanBinaryNode* head, traversal_operation opr) {
+	if (head->IsLeaf() == false) {
+		if (head->GetLeft())
+			PostOrderOperation(head->GetLeft(), opr);
+		if (head->GetRight())
+			PostOrderOperation(head->GetRight(), opr);
+	}
+	opr(head);
 }
 
