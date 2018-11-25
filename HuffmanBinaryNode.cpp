@@ -1,4 +1,12 @@
 #include "HuffmanBinaryNode.h"
+int HuffmanBinaryNode::ID = 0;
+
+//<summary>
+// Returns the UID for this node
+//</summary>
+int HuffmanBinaryNode::GetID() {
+	return id;
+}
 
 //<summary>
 // Returns if this node is a leaf, containing a bye.
@@ -69,7 +77,7 @@ HuffmanBinaryNode* HuffmanBinaryNode::GetRight(){
 //<summary>
 // Sets the right child node of the node
 //</summary>
-void HuffmanBinaryNode::SetRight(HuffmanBinaryNode* nodeValue){
+void HuffmanBinaryNode::SetRight(HuffmanBinaryNode* nodeValue) {
 	if (IsLeaf())
 		std::cout << "Operation caused a right child node to be set on a leaf\n";
 	right = nodeValue;
@@ -79,6 +87,7 @@ void HuffmanBinaryNode::SetRight(HuffmanBinaryNode* nodeValue){
 // Constructor.
 //</summary>
 HuffmanBinaryNode::HuffmanBinaryNode(bool isLeafValue) {
+	id = ID++;
 	isLeaf = isLeafValue;
 	left = 0;
 	right = 0;
@@ -92,6 +101,22 @@ HuffmanBinaryNode::~HuffmanBinaryNode() {
 		delete left;
 	if (right)
 		delete right;
+}
+//<summary>
+// Deconstructor. Deletes the two referenced nodes if they exist
+//</summary>
+void HuffmanBinaryNode::Print(HuffmanBinaryNode* node) {
+	std::cout << "Node " << node->GetID() << "(";
+	std::cout << "\tIsLeaf: " << node->IsLeaf();
+	if (node->IsLeaf())
+		std::cout << "\tbyte: " << node->GetByte();
+	else {
+		if (node->GetLeft())
+			std::cout << "\tleft: " << node->GetLeft()->GetID();
+		if (node->GetRight())
+			std::cout << "\tright: " << node->GetRight()->GetID();
+	}
+	std::cout << "" << node->GetID() << ")\n";
 }
 
 //<summary>
