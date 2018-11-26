@@ -35,7 +35,7 @@ public:
 	void writeByte(unsigned short byte);
 	void writeBit(unsigned short bit);
 	
-	void EOF();
+	bool CheckEOF();
 	void Rewind();
 	void Close();
 	void Pad();

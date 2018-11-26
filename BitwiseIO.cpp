@@ -3,7 +3,7 @@
 // Prepares this BitwiseIO for write
 // </summary>
 void BitwiseIO::OpenWrite(std::string filename) {
-	openFile = fopen(filename, "w+");
+	openFile = fopen(filename.c_str(), "w+");
 	currentBitwiseBytePosition = 7;
 }
 
@@ -11,7 +11,7 @@ void BitwiseIO::OpenWrite(std::string filename) {
 // Prepares this BitwiseIO for read
 // </summary>
 void BitwiseIO::OpenRead(std::string filename) {
-	openFile = fopen(filename, "r");
+	openFile = fopen(filename.c_str(), "r");
 	currentBitwiseBytePosition = -1;
 	//Check to see if the file has contents, and if it doesn't mark IO as complete. Otherwise, rewind the file back to start so it can be read properly
 	fseek(openFile, 0, SEEK_END);
@@ -28,7 +28,7 @@ BitwiseIO::BitwiseIO(bool readMode, unsigned int bufferMaxSizeValue, std::string
 	ioMode = readMode;
 	bufferMaxSize = bufferMaxSizeValue;
 	//Create a read buffer of the appropriate size
-	ioBuffer = malloc(sizeof(unsigned short) * bufferMaxSize); //sizeof is unnecessary since sizeof unsigned short is 1, but it is there for clarity
+	ioBuffer = static_cast<unsigned short*>(malloc(sizeof(unsigned short) * bufferMaxSize)); //sizeof is unnecessary since sizeof unsigned short is 1, but it is there for clarity
 	
 	//Open the file in the proper mode
 	if (ioMode)
@@ -41,8 +41,8 @@ BitwiseIO::BitwiseIO(bool readMode, unsigned int bufferMaxSizeValue, std::string
 // Deconstructor
 // </summary>
 BitwiseIO::~BitwiseIO() {
-	if (readBuffer)
-		free(readBuffer);
+	if (ioBuffer)
+		free(ioBuffer);
 }
 
 // <summary>
@@ -68,7 +68,7 @@ unsigned short BitwiseIO::readByte() {
 		//If we have reached the end of the buffer
 		if (bufferIndex == storedBufferSize) {
 			//Read more in
-			storedBufferSize = fread((void*)ioBuffer, 1, bufferMaxSize, openFile);
+			storedBufferSize = fread(static_cast<void*>(ioBuffer), 1, bufferMaxSize, openFile);
 			//Reset the buffer index
 			bufferIndex = 0;
 		}
@@ -80,7 +80,7 @@ unsigned short BitwiseIO::readByte() {
 	//If our Bitwise byte is a full byte
 	if (currentBitwiseBytePosition == 7) {
 		//Mark it as fully consumed
-		currentBitwiseBytePosition = -1
+		currentBitwiseBytePosition = -1;
 		//And return it
 		return currentBitwiseOperationByte;
 	}
@@ -109,7 +109,7 @@ unsigned short BitwiseIO::readBit() {
 		return 0;
 	}
 	//If our current stored bitwise byte is empty, get a new byte
-	if (currentBitwiseBytePosition = -1)
+	if (currentBitwiseBytePosition == -1)
 		currentBitwiseOperationByte = readByte();
 	
 	//Return if there is a bit in the `currentBitwiseBytePosition` by currentBitwiseOperationByte AND a 1 shifted to the correct position 
@@ -154,7 +154,7 @@ void BitwiseIO::writeBit(unsigned short bit) {
 		//If we have reached the end of the buffer
 		if (bufferIndex == bufferMaxSize) {
 			//Write the buffer out
-			fwrite((void*)ioBuffer, 1, bufferIndex, openFile);
+			fwrite(static_cast<void*>(ioBuffer), 1, bufferIndex, openFile);
 			//Reset the buffer index
 			bufferIndex = 0;
 		}
@@ -171,7 +171,7 @@ void BitwiseIO::writeBit(unsigned short bit) {
 	currentBitwiseBytePosition--;
 }
 
-void BitwiseIO::EOF() {
+bool BitwiseIO::CheckEOF() {
 	return IOBreakFlag || IOERRFlag;
 }
 
@@ -186,7 +186,7 @@ void BitwiseIO::Rewind() {
 // Closes the open file
 // </summary>
 void BitwiseIO::Close() {
-	fclose(rewind);
+	fclose(openFile);
 }
 
 // <summary>
@@ -195,7 +195,7 @@ void BitwiseIO::Close() {
 void BitwiseIO::Pad() {
 	if (ioMode) {
 		std::cout << "Write operation called on read IO\n";
-		return 0;
+		return;
 	}
 	//Pad with 0 bits until the current byte is full
 	while (currentBitwiseBytePosition != 7) writeBit(1);
