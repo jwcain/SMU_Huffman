@@ -4,6 +4,9 @@
 #include <vector>
 #include <iostream>
 
+//<summary>
+// Represents a node for the Huffman frequency tree calculation.
+//</summary>
 class HuffmanBinaryNode {
 private:
 	bool isLeaf;
@@ -12,6 +15,7 @@ private:
 	HuffmanBinaryNode* right;
 	unsigned long frequency;
 	int id;
+	
 	static int ID;
 public:
 	//A traversal operation is a function pointer used to allow for a method to be called on all nodes
