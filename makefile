@@ -22,5 +22,18 @@ clear : clean
 	
 clean :
 	rm -f ./Huffman Huffman.o BitwiseIO.o HuffmanBinaryNode.o
-	
 
+test : 
+	./Huffman encode input/readable.test TESTING_OUTPUT.OUTPUT
+	#diff input/readable.test TESTING_OUTPUT.OUTPUT
+	rm TESTING_OUTPUT.OUTPUT
+	
+testmore : 
+	./Huffman encode input/readable.test TESTING_OUTPUT.OUTPUT
+	diff input/readable.test TESTING_OUTPUT.OUTPUT
+	./Huffman encode input/empty.test TESTING_OUTPUT.OUTPUT
+	diff input/empty.test TESTING_OUTPUT.OUTPUT
+	./Huffman encode input/10MBData.test TESTING_OUTPUT.OUTPUT
+	diff input/100MBData.test TESTING_OUTPUT.OUTPUT
+	rm TESTING_OUTPUT.OUTPUT
+	

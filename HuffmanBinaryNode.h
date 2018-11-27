@@ -3,6 +3,9 @@
 
 #include <vector>
 #include <iostream>
+#include <queue>
+
+
 
 //<summary>
 // Represents a node for the Huffman frequency tree calculation.
@@ -23,7 +26,7 @@ public:
 	typedef void (*traversal_operation)(HuffmanBinaryNode* node);
 	int GetID();
 	bool IsLeaf();
-	unsigned long GetFrequency();
+	unsigned long GetFrequency() const;
 	void SetFrequency(unsigned long frequencyValue);
 	unsigned char GetByte();
 	void SetByte(unsigned char byteValue);
@@ -31,8 +34,6 @@ public:
 	void SetLeft(HuffmanBinaryNode* nodeValue);
 	HuffmanBinaryNode* GetRight();
 	void SetRight(HuffmanBinaryNode* nodeValue);
-	//Override the < operation to check frequency
-	bool operator<(const HuffmanBinaryNode& rhs) {return this->frequency < rhs.frequency;}
 	HuffmanBinaryNode(bool isLeafValue);
 	~HuffmanBinaryNode();
 	
@@ -42,7 +43,22 @@ public:
 	static void PostOrderOperation(HuffmanBinaryNode* head, traversal_operation opr);
 };
 
+//Create a struct that compares HuffmanNodes. Used for sorting in a priority_queue for highest frequency
+struct CompareHuffmanBinaryNodeHigh {
+	bool operator()(const HuffmanBinaryNode* lhs, const HuffmanBinaryNode* rhs) const {
+		return lhs->GetFrequency() < rhs->GetFrequency();
+	}
+};
 
+//Create a struct that compares HuffmanNodes. Used for sorting in a priority_queue for lowest frequency
+struct CompareHuffmanBinaryNodeLow {
+	bool operator()(const HuffmanBinaryNode* lhs, const HuffmanBinaryNode* rhs) const {
+		return lhs->GetFrequency() > rhs->GetFrequency();
+	}
+};
 
+//Declare a PQ alias for use in constructing the human tree
+typedef std::priority_queue<HuffmanBinaryNode*,std::vector<HuffmanBinaryNode*>,CompareHuffmanBinaryNodeHigh> HuffmanNodePQHigh;
+typedef std::priority_queue<HuffmanBinaryNode*,std::vector<HuffmanBinaryNode*>,CompareHuffmanBinaryNodeLow> HuffmanNodePQLow;
 
 #endif

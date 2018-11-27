@@ -1,3 +1,5 @@
+input/
+input/*
 HuffmanEncode
 HuffmanDecode
 *.o

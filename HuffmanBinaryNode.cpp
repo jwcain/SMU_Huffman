@@ -18,7 +18,7 @@ bool HuffmanBinaryNode::IsLeaf(){
 //<summary>
 // Returns the calculated frequency of this bye
 //</summary>
-unsigned long HuffmanBinaryNode::GetFrequency(){
+unsigned long HuffmanBinaryNode::GetFrequency() const{
 	return frequency;
 }
 
@@ -106,8 +106,8 @@ HuffmanBinaryNode::~HuffmanBinaryNode() {
 // Deconstructor. Deletes the two referenced nodes if they exist
 //</summary>
 void HuffmanBinaryNode::Print(HuffmanBinaryNode* node) {
-	std::cout << "Node " << node->GetID() << "(";
-	std::cout << "\tIsLeaf: " << node->IsLeaf();
+	std::cout << "Node " << node->GetID() << "\t(";
+	std::cout << "IsLeaf: " << node->IsLeaf();
 	if (node->IsLeaf())
 		std::cout << "\tbyte: " << node->GetByte();
 	else {

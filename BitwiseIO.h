@@ -6,34 +6,39 @@
 #include <cstdio>
 #include <string>
 
+
+using Byte = unsigned char;
+using Bit = unsigned char;
+
 class BitwiseIO {
 private:
 	FILE* openFile = NULL;
 	bool ioMode;
 
 	unsigned int bufferMaxSize;
-	unsigned short* ioBuffer;
+	Byte* ioBuffer;
 	unsigned int storedBufferSize = 0;
 	unsigned int bufferIndex = 0;
-	unsigned short currentBitwiseOperationByte = 0;
+	Byte currentBitwiseOperationByte = 0;
 	int currentBitwiseBytePosition;
 	bool IOBreakFlag = false;
 	bool IOERRFlag = false;
 
-	const unsigned short US_1 = 1;
+	const Byte US_1 = 1;
 	
 	void OpenWrite(std::string filename);
 	void OpenRead(std::string filename);
+	void WriteBufferOut();
 public:
 	//Read if true, write if false
 	BitwiseIO(bool readMode, unsigned int bufferMaxSizeValue, std::string filename);
 	~BitwiseIO();
 	
-	unsigned short readByte();
-	unsigned short readBit();
+	Byte ReadByte();
+	Bit ReadBit();
 	
-	void writeByte(unsigned short byte);
-	void writeBit(unsigned short bit);
+	void WriteByte(Byte byte);
+	void WriteBit(Bit bit);
 	
 	bool CheckEOF();
 	void Rewind();
