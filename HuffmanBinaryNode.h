@@ -1,7 +1,6 @@
 #ifndef HUFFMAN_BINARY_NODE_H
 #define HUFFMAN_BINARY_NODE_H
 
-#include <vector>
 #include <iostream>
 #include <queue>
 
@@ -19,14 +18,22 @@ private:
 	HuffmanBinaryNode* right;
 	HuffmanBinaryNode* parent;
 	unsigned long frequency;
-	int id;
+	unsigned int id; // ID is an unsigned short since there are only 256 posible unique characters
 	
-	static int ID;
+	static unsigned int ID;
 public:
+	//Create a struct that compares HuffmanNodes. Used for sorting in a priority_queue for highest frequency
+	struct UnfinishedHuffmanBinaryNode {
+		HuffmanBinaryNode* node;
+		unsigned short leftID;
+		unsigned short rightID;
+	};
+
+
 	//A traversal operation is a function pointer used to allow for a method to be called on all nodes
 	//across a traversal. The method is called per node in order
 	typedef void (*traversal_operation)(HuffmanBinaryNode* node);
-	int GetID();
+	unsigned int GetID();
 	bool IsLeaf();
 	unsigned long GetFrequency() const;
 	void SetFrequency(unsigned long frequencyValue);
@@ -42,12 +49,14 @@ public:
 	~HuffmanBinaryNode();
 	bool IsEOF();
 	void MarkEOF();
+	void OverrideID(unsigned int idValue);
 	
-	static void Print(HuffmanBinaryNode* node);
-	static std::vector<int> Pack(HuffmanBinaryNode* node);
-	static HuffmanBinaryNode* Unpack(std::vector<int> n);
+	void Print(HuffmanBinaryNode* node);
 	static void PostOrderOperation(HuffmanBinaryNode* head, traversal_operation opr);
+	static void PreOrderOperation(HuffmanBinaryNode* head, traversal_operation opr);
 };
+
+
 
 //Create a struct that compares HuffmanNodes. Used for sorting in a priority_queue for highest frequency
 struct CompareHuffmanBinaryNodeHigh {

@@ -4,14 +4,18 @@
 #include "HuffmanBinaryNode.h"
 
 
-
+//<summary>
+// A record used to both track frequency count and a compressed bit representation
+//</summary>
 struct ByteRecord {
 	int count;
 	std::vector<bool> compressedRepresentation;
 };
+//There are 256 unique bytes, so we can count frequency using an array of numbers of this size
 ByteRecord frequencyTable[256];
 ByteRecord eofRep;
-HuffmanBinaryNode* cheaterHead;
+BitwiseIO* reader;
+BitwiseIO* writer;
 
 void LogByteStrings(HuffmanBinaryNode* leaf) {
 	if (leaf->IsLeaf() == false)
@@ -46,13 +50,99 @@ void ReverseWriteABoolVector(BitwiseIO* writer, std::vector<bool> vector) {
 }
 
 
+//<summary>
+// Returns the binary form of this node
+//</summary>
+void PackNodeToBits(HuffmanBinaryNode* node){
+	//Write out is leaf as a bit
+	writer->WriteBit(node->IsLeaf());
+	//write out isEOF as a bit
+	writer->WriteBit(node->IsEOF());
+	//write out ID as a byte
+	writer->WriteByte(node->GetID());
+	
+	//if isLeaf
+	if (node->IsLeaf()) 
+		//write out byte representation
+		writer->WriteByte(node->GetByte());
+	else
+		//Write out left child's id as a byte
+		writer->WriteByte(node->GetLeft()->GetID());
+		//Write out right child's id as a byte
+		writer->WriteByte(node->GetRight()->GetID());
+}
+
+//<summary>
+// Recreates an unfinished node from binary save. The links to children need to be restored after all nodes are read
+//</summary>
+HuffmanBinaryNode::UnfinishedHuffmanBinaryNode* UnpackFromBits() {
+	//Make a new unfinished node
+	HuffmanBinaryNode::UnfinishedHuffmanBinaryNode* unfinishedNode = new HuffmanBinaryNode::UnfinishedHuffmanBinaryNode();
+	//Read out is leaf as a bit and Make a new node of the appropriate type
+	HuffmanBinaryNode* newNode = new HuffmanBinaryNode(reader->ReadBit() > 0);
+	//Assign the new new node to unfinished node
+	unfinishedNode->node = newNode;
+	//Read out isEOF as a bit and Mark EOF
+	if (reader->ReadBit() > 0)
+		newNode->MarkEOF();
+	//Read out ID as a byte and override ID
+	newNode->OverrideID(reader->ReadByte());
+	//if isLeaf
+	if (newNode->IsLeaf()) {
+		//Read out byte representation and Set byte representation
+		newNode->SetByte(reader->ReadByte());
+	}
+	else {
+		//Read out left child's id as a byte and set left ID
+		unfinishedNode->leftID = reader->ReadByte();
+		//Read out right child's id as a byte and Set right ID
+		unfinishedNode->rightID = reader->ReadByte();
+	}
+	return unfinishedNode;
+}
+
+
 void Decode(std::string inFileName, std::string outFileName) {
-	BitwiseIO* reader = new BitwiseIO(true, 255, inFileName);
-	BitwiseIO* writer = new BitwiseIO(false, 255, outFileName);
-	//[TODO] read the tree representation
+	reader = new BitwiseIO(true, 255, inFileName);
+	writer = new BitwiseIO(false, 255, outFileName);
 	
+	//Get the first node from the file
+	HuffmanBinaryNode::UnfinishedHuffmanBinaryNode* unfinishedHead = UnpackFromBits();
+	//Create a list of all unfinished nodes
+	std::vector<HuffmanBinaryNode::UnfinishedHuffmanBinaryNode*> unfinishedNodes;
+	//Add head to it
+	unfinishedNodes.push_back(unfinishedHead);
+	//The amount we need to read is equal to the first node's id. This is because the head (the first one printed) is the second to last node to be created (EOF is last)
+	//We have already read in one node, so the total amount is (head->GetID()+1)-1, which is just head's id
+	unsigned int amountToRead = unfinishedHead->node->GetID();
+	for (unsigned int i = 0; i < amountToRead; i++) {
+		HuffmanBinaryNode::UnfinishedHuffmanBinaryNode* newUHead = UnpackFromBits();
+		unfinishedNodes.push_back(newUHead);
+	}
+	//We have now read all of the nodes we have saved.
+	//Now we need to rebuild the tree.
+	//We do this by looping through all nodes
+	for (std::vector<HuffmanBinaryNode::UnfinishedHuffmanBinaryNode*>::iterator it = unfinishedNodes.begin() ; it != unfinishedNodes.end(); ++it) {
+			//If it is a leaf it cannot have children, so continue
+			if ((*it)->node->IsLeaf())
+				continue;
+			else
+				//Otherwise loop through all nodes
+				for (std::vector<HuffmanBinaryNode::UnfinishedHuffmanBinaryNode*>::iterator jt = unfinishedNodes.begin() ; jt != unfinishedNodes.end(); ++jt)
+					//If this node's id is what is supposed to the the firsts left child, assign it as such
+					if ((*jt)->node->GetID() == (*it)->leftID)
+						(*it)->node->SetLeft((*jt)->node);
+					//Or this node's id is what is supposed to the the firsts right child, assign it as such
+					else if ((*jt)->node->GetID() == (*it)->rightID)
+						(*it)->node->SetRight((*jt)->node);
+	}
+	//Set head to the node in the unfinished head
+	HuffmanBinaryNode* head = unfinishedHead->node;
 	
-	HuffmanBinaryNode* head = cheaterHead;
+	//Free all the Unfinished pointers
+	for (std::vector<HuffmanBinaryNode::UnfinishedHuffmanBinaryNode*>::iterator it = unfinishedNodes.begin() ; it != unfinishedNodes.end(); ++it)
+		delete (*it);
+	
 	//Note: We will never have read in a tree of size 1, since the encode procedure also makes an EOF node. So the following loop cannot get stuck on tree size 1
 	HuffmanBinaryNode* cNode = head;
 	while (reader->CheckEOF() == false) {
@@ -82,14 +172,8 @@ void Decode(std::string inFileName, std::string outFileName) {
 
 
 void Encode(std::string inFileName, std::string outFileName) {
-	BitwiseIO* reader = new BitwiseIO(true, 255, inFileName);
-	BitwiseIO* writer = new BitwiseIO(false, 255, outFileName);
-	//There are 256 unique bytes, so we can count frequency using an array of numbers of this size
-
-	/*//Initialize the array to 0
-	for (unsigned int i = 0; i < 256; i++) {
-		frequencyTable[i] = 0;
-	}*/
+	reader = new BitwiseIO(true, 255, inFileName);
+	writer = new BitwiseIO(false, 255, outFileName);
 	
 	//Read the whole file
 	while (reader->CheckEOF() == false) { 
@@ -162,8 +246,8 @@ void Encode(std::string inFileName, std::string outFileName) {
 				else
 					frequencyTable[node->GetByte()].compressedRepresentation.push_back(cNode->GetRight() == pNode);
 			}
+			/*
 			//Print out the representation of this bit in reverse order of the vector (so from top to bottom, the correct way)
-			
 			std::vector<bool>::iterator i = frequencyTable[node->GetByte()].compressedRepresentation.end();
 			std::cout << "("<<
 			((node->IsEOF()) ? (char)255 : (char)node->GetByte())
@@ -176,10 +260,12 @@ void Encode(std::string inFileName, std::string outFileName) {
 					std::cout << "0";
 			} 
 			std::cout << "\n";
+			*/
 		}
 	);
 	
-	//[TODO] Print out the tree representation
+	//Write out the tree in depth first, pre order fashion. This is done so that we can use the ID of the head node as a count of the total number of nodes to read in during decode
+	HuffmanBinaryNode::PreOrderOperation(head, PackNodeToBits);
 	
 	//Read through the file again, this time writing out the bits we have calculated
 	while (reader->CheckEOF() == false) {
@@ -201,9 +287,7 @@ void Encode(std::string inFileName, std::string outFileName) {
 	delete reader;
 	delete writer;
 	//Deleting head causes a cascade of all children to be deleted
-	cheaterHead = head;
-	//delete head;
-	Decode(outFileName, "FinalTest.output");
+	delete head;
 }
 
 int main(int argc, char** argv) {

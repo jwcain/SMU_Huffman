@@ -1,10 +1,10 @@
 #include "HuffmanBinaryNode.h"
-int HuffmanBinaryNode::ID = 0;
+unsigned int  HuffmanBinaryNode::ID = 0;
 
 //<summary>
 // Returns the UID for this node
 //</summary>
-int HuffmanBinaryNode::GetID() {
+unsigned int HuffmanBinaryNode::GetID() {
 	return id;
 }
 
@@ -104,6 +104,7 @@ HuffmanBinaryNode::HuffmanBinaryNode(bool isLeafValue) {
 	left = 0;
 	right = 0;
 	parent = 0;
+	byte = 0;
 	isEOF = false;
 }
 
@@ -129,6 +130,12 @@ bool HuffmanBinaryNode::IsEOF() {
 void HuffmanBinaryNode::MarkEOF() {
 	isEOF = true;
 }
+//<summary>
+// Assigns an ID to this node
+//</summary>
+void HuffmanBinaryNode::OverrideID(unsigned int idValue) {
+	id = idValue;
+}
 
 
 //<summary>
@@ -152,23 +159,6 @@ void HuffmanBinaryNode::Print(HuffmanBinaryNode* node) {
 }
 
 //<summary>
-// Returns the binary form of this node
-//</summary>
-std::vector<int> HuffmanBinaryNode::Pack(HuffmanBinaryNode* node){
-	std::vector<int> ret;
-	//[TODO] Figure out what this means
-	return ret;
-}
-
-//<summary>
-// Recreates a node from binary save
-//</summary>
-HuffmanBinaryNode* HuffmanBinaryNode::Unpack(std::vector<int> n){
-	//[TODO] Figure out what this means
-	return 0;
-}
-
-//<summary>
 // Calls an operation on all nodes in depth first, post order fashion
 //</summary>
 void HuffmanBinaryNode::PostOrderOperation(HuffmanBinaryNode* head, traversal_operation opr) {
@@ -179,5 +169,18 @@ void HuffmanBinaryNode::PostOrderOperation(HuffmanBinaryNode* head, traversal_op
 			PostOrderOperation(head->GetRight(), opr);
 	}
 	opr(head);
+}
+
+//<summary>
+// Calls an operation on all nodes in depth first, pre order fashion
+//</summary>
+void HuffmanBinaryNode::PreOrderOperation(HuffmanBinaryNode* head, traversal_operation opr) {
+	opr(head);
+	if (head->IsLeaf() == false) {
+		if (head->GetLeft())
+			PostOrderOperation(head->GetLeft(), opr);
+		if (head->GetRight())
+			PostOrderOperation(head->GetRight(), opr);
+	}
 }
 
