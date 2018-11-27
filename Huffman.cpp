@@ -65,11 +65,12 @@ void PackNodeToBits(HuffmanBinaryNode* node){
 	if (node->IsLeaf()) 
 		//write out byte representation
 		writer->WriteByte(node->GetByte());
-	else
+	else {
 		//Write out left child's id as a byte
 		writer->WriteByte(node->GetLeft()->GetID());
 		//Write out right child's id as a byte
 		writer->WriteByte(node->GetRight()->GetID());
+	}
 }
 
 //<summary>
@@ -207,6 +208,7 @@ void Encode(std::string inFileName, std::string outFileName) {
 		HuffmanBinaryNode* newNode = new HuffmanBinaryNode(true);
 		newNode->SetByte(0);
 		newNode->SetFrequency(0);
+		newNode->MarkEOF();
 		nodePQ.push(newNode);
 	}
 
@@ -270,14 +272,11 @@ void Encode(std::string inFileName, std::string outFileName) {
 	//Read through the file again, this time writing out the bits we have calculated
 	while (reader->CheckEOF() == false) {
 		Byte readByte = reader->ReadByte();
-		std::cout << (char)readByte;
 		ReverseWriteABoolVector(writer, frequencyTable[readByte].compressedRepresentation);
 	}
-	std::cout << "\n" ;
 	//Write the end of file node
 	ReverseWriteABoolVector(writer, eofRep.compressedRepresentation);
 	
-	std::cout << head->GetFrequency() <<"\n" ;
 	
 	//Close read/writer now that we are done with them
 	reader->Close();
