@@ -217,7 +217,8 @@ void BitwiseIO::Rewind() {
 	
 	//Reset the buffer index
 	bufferIndex = 0;
-	
+	//Reset the stored buffer size
+	storedBufferSize = 0;
 	//Place the bitwise position in the correct spot for the ioMode
 	currentBitwiseBytePosition = (ioMode) ? -1 : 7;
 	

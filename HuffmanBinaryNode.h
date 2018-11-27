@@ -13,9 +13,11 @@
 class HuffmanBinaryNode {
 private:
 	bool isLeaf;
+	bool isEOF;
 	unsigned char byte;
 	HuffmanBinaryNode* left;
 	HuffmanBinaryNode* right;
+	HuffmanBinaryNode* parent;
 	unsigned long frequency;
 	int id;
 	
@@ -34,8 +36,12 @@ public:
 	void SetLeft(HuffmanBinaryNode* nodeValue);
 	HuffmanBinaryNode* GetRight();
 	void SetRight(HuffmanBinaryNode* nodeValue);
+	HuffmanBinaryNode* GetParent();
+	void SetParent(HuffmanBinaryNode* nodeValue);
 	HuffmanBinaryNode(bool isLeafValue);
 	~HuffmanBinaryNode();
+	bool IsEOF();
+	void MarkEOF();
 	
 	static void Print(HuffmanBinaryNode* node);
 	static std::vector<int> Pack(HuffmanBinaryNode* node);

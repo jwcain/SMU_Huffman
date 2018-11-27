@@ -82,6 +82,18 @@ void HuffmanBinaryNode::SetRight(HuffmanBinaryNode* nodeValue) {
 		std::cout << "Operation caused a right child node to be set on a leaf\n";
 	right = nodeValue;
 }
+//<summary>
+// Sets the  parent node of the node
+//</summary>
+HuffmanBinaryNode* HuffmanBinaryNode::GetParent() {
+	return parent;
+}
+//<summary>
+// Sets the parent node of the node
+//</summary>
+void HuffmanBinaryNode::SetParent(HuffmanBinaryNode* nodeValue){
+	parent = nodeValue;
+}
 
 //<summary>
 // Constructor.
@@ -91,6 +103,8 @@ HuffmanBinaryNode::HuffmanBinaryNode(bool isLeafValue) {
 	isLeaf = isLeafValue;
 	left = 0;
 	right = 0;
+	parent = 0;
+	isEOF = false;
 }
 
 //<summary>
@@ -103,20 +117,38 @@ HuffmanBinaryNode::~HuffmanBinaryNode() {
 		delete right;
 }
 //<summary>
+// Returns if this is the EOF character
+//</summary>
+bool HuffmanBinaryNode::IsEOF() {
+	return isEOF;
+}
+
+//<summary>
+// Marks this node as representing the EOF character
+//</summary>
+void HuffmanBinaryNode::MarkEOF() {
+	isEOF = true;
+}
+
+
+//<summary>
 // Deconstructor. Deletes the two referenced nodes if they exist
 //</summary>
 void HuffmanBinaryNode::Print(HuffmanBinaryNode* node) {
 	std::cout << "Node " << node->GetID() << "\t(";
 	std::cout << "IsLeaf: " << node->IsLeaf();
+	std::cout << "\tfreq: " << node->GetFrequency();
+	if (node->GetParent())
+		std::cout << "\tpar: " << node->GetParent()->GetID();
 	if (node->IsLeaf())
-		std::cout << "\tbyte: " << node->GetByte();
+		std::cout << "\tbyte: " << (char)node->GetByte();
 	else {
 		if (node->GetLeft())
 			std::cout << "\tleft: " << node->GetLeft()->GetID();
 		if (node->GetRight())
 			std::cout << "\tright: " << node->GetRight()->GetID();
 	}
-	std::cout << "" << node->GetID() << ")\n";
+	std::cout << "\n";
 }
 
 //<summary>
