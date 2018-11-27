@@ -1,9 +1,24 @@
+/*
+Author:
+	Justin Cain
+	@AffinityForFun
+	jwcain.github.io
+*/
+
 #include "BitwiseIO.h"
 // <summary>
 // Prepares this BitwiseIO for write
 // </summary>
 void BitwiseIO::OpenWrite(std::string filename) {
+	//Attempt to open the file
 	openFile = fopen(filename.c_str(), "w+");
+	//Check if we opened a file or caused an error
+	if (openFile == NULL || ferror(openFile)) {
+		//If we did set the IO break and return
+		IOBreakFlag = true;
+		return;
+	}
+	//Set the necessary position within the first byte for writing
 	currentBitwiseBytePosition = 7;
 }
 
@@ -11,16 +26,28 @@ void BitwiseIO::OpenWrite(std::string filename) {
 // Prepares this BitwiseIO for read
 // </summary>
 void BitwiseIO::OpenRead(std::string filename) {
+	//Attempt to open the file
 	openFile = fopen(filename.c_str(), "r");
+	//Check if we opened a file or caused an error
+	if (openFile == NULL || ferror(openFile)) {
+		IOBreakFlag = true;
+		return;
+	}
+	//Set the necessary position within the first byte for reading
 	currentBitwiseBytePosition = -1;
-	//Check to see if the file has contents, and if it doesn't mark IO as complete. Otherwise, rewind the file back to start so it can be read properly
+	//Check to see if the file has contents
 	fseek(openFile, 0, SEEK_END);
-	if (ftell(openFile) == 0) 
+	if (ftell(openFile) == 0)
+		//If it doesn't mark IO as complete.
 		IOBreakFlag = true;
 	else
+		//Otherwise, rewind the file back to start so it can be read properly
 		rewind(openFile);
 }
 
+// <summary>
+// Writes the buffer out to the current file
+// </summary>
 void BitwiseIO::WriteBufferOut() {
 	//Do nothing if there is no data in the buffer
 	if (bufferIndex == 0)
@@ -41,8 +68,12 @@ void BitwiseIO::WriteBufferOut() {
 // Constructor. Opens in read mode if bool is true, write mode if false. Takes io buffer size and a file name to operate on
 // </summary>
 BitwiseIO::BitwiseIO(bool readMode, unsigned int bufferMaxSizeValue, std::string filename) {
+	//Set the ioMode
 	ioMode = readMode;
+	
+	//Set the max buffer size
 	bufferMaxSize = bufferMaxSizeValue;
+	
 	//Create a read buffer of the appropriate size
 	ioBuffer = static_cast<Byte*>(malloc(sizeof(Byte) * bufferMaxSize));
 	
@@ -57,12 +88,13 @@ BitwiseIO::BitwiseIO(bool readMode, unsigned int bufferMaxSizeValue, std::string
 // Deconstructor
 // </summary>
 BitwiseIO::~BitwiseIO() {
+	//If we made a buffer, free it
 	if (ioBuffer)
 		free(ioBuffer);
 }
 
 // <summary>
-// Reads a whole byte from read bit. If the stored byte has been untouched yet, it just returns that.
+// Reads a whole byte from read bit.
 // </summary>
 Byte BitwiseIO::ReadByte() {
 	if (IOBreakFlag) {
@@ -74,16 +106,15 @@ Byte BitwiseIO::ReadByte() {
 		return 0;
 	}
 
+	//Create a returnByte set to all 0s
 	Byte retByte = 0;
-	//If we have made it this far, we have to readbit 8 times to construct a byte;
+	//Read bit 8 times to construct a byte;
 	for (short i = 7; i >= 0; i--)
 		//If the bit is positive
 		if (ReadBit() > 0)
 			//Our or return byte with 1 shifted over to the proper position
 			retByte = retByte | ( US_1 << i);
 		
-	
-	
 	return retByte;
 }
 
@@ -129,8 +160,7 @@ Bit BitwiseIO::ReadBit() {
 	
 	//Return if there is a bit in the `currentBitwiseBytePosition` by currentBitwiseOperationByte AND a 1 shifted to the correct position 
 	Byte retBit = currentBitwiseOperationByte & ( US_1 << currentBitwiseBytePosition);
-	//std::cout << std::bitset<8>(currentBitwiseOperationByte) << "\n" ;
-	//std::cout << std::bitset<8>(US_1 << currentBitwiseBytePosition)<< "  |"<<currentBitwiseBytePosition<<"\n";
+
 	//Move the position we are looking at down
 	currentBitwiseBytePosition--;
 	
@@ -178,6 +208,8 @@ void BitwiseIO::WriteBit(Bit bit) {
 		//Write this bit to the proper position by taking
 		//currentBitwiseOperationByte OR 1 shifted to the current write position
 		currentBitwiseOperationByte = currentBitwiseOperationByte | ( US_1 << currentBitwiseBytePosition);
+		
+		
 	//Move the current write position down.
 	currentBitwiseBytePosition--;
 	
@@ -201,8 +233,11 @@ void BitwiseIO::WriteBit(Bit bit) {
 	}
 }
 
+// <summary>
+// Checks if we have reached an IOBreakFlag
+// </summary>
 bool BitwiseIO::CheckEOF() {
-	return IOBreakFlag || IOERRFlag;
+	return IOBreakFlag;
 }
 
 // <summary>
@@ -237,16 +272,25 @@ void BitwiseIO::Rewind() {
 // Closes the open file
 // </summary>
 void BitwiseIO::Close() {
+	//If this was a writer
 	if (ioMode == false) {
+		//And we have extra bits in our current byte that have not been placed into the buffer
 		if (currentBitwiseBytePosition != 7) {
+			//Pad the byte to 0
 			Pad();
+			//Write that byte out
 			currentBitwiseOperationByte = ioBuffer[bufferIndex++];
 		}
+		//If we have written a byte to the buffer, but not sent it out to the file
 		if (bufferIndex != 0) {
+			//Write the buffer to the file
 			WriteBufferOut();
 		}
+		//Flush the file
 		fflush(openFile);
 	}
+	
+	//Close the file
 	fclose(openFile);
 }
 

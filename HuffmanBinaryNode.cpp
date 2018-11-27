@@ -1,3 +1,10 @@
+/*
+Author:
+	Justin Cain
+	@AffinityForFun
+	jwcain.github.io
+*/
+
 #include "HuffmanBinaryNode.h"
 unsigned int  HuffmanBinaryNode::ID = 0;
 
@@ -182,5 +189,23 @@ void HuffmanBinaryNode::PreOrderOperation(HuffmanBinaryNode* head, traversal_ope
 		if (head->GetRight())
 			PostOrderOperation(head->GetRight(), opr);
 	}
+}
+
+//<summary>
+// Calls an operation on all nodes in depth first, in order fashion
+//</summary>
+void HuffmanBinaryNode::InOrderOperation(HuffmanBinaryNode* head, traversal_operation opr) {
+	if (head->IsLeaf() == false) {
+		
+		if (head->GetLeft())
+			PostOrderOperation(head->GetLeft(), opr);
+		
+		opr(head);
+		
+		if (head->GetRight())
+			PostOrderOperation(head->GetRight(), opr);
+	}
+	else
+		opr(head);
 }
 
