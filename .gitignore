@@ -1,5 +1,4 @@
 input/
 input/*
-HuffmanEncode
-HuffmanDecode
+Huffman
 *.o
