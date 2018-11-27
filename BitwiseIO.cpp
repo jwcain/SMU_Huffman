@@ -105,6 +105,32 @@ Byte BitwiseIO::ReadByte() {
 		std::cout << "Read operation called on write IO\n";
 		return 0;
 	}
+	
+	//If the read byte hasn't had a bit read, return the whole byte
+	if (currentBitwiseBytePosition == 7) {
+		Byte retByte = currentBitwiseOperationByte;
+		currentBitwiseOperationByte = ioBuffer[bufferIndex++];
+		
+		//If we have reached the end of the buffer and not the end of the file
+		if (bufferIndex == storedBufferSize && !feof(openFile)) {
+			
+			//Read more in
+			storedBufferSize = fread(ioBuffer, 1, bufferMaxSize, openFile);
+			if (ferror(openFile)) {
+				std::cout << "Error Reading from file\n";
+				IOBreakFlag = true;
+				return 0;
+			}
+			
+			//Reset the buffer index
+			bufferIndex = 0;
+		}
+		else if(bufferIndex == storedBufferSize  && feof(openFile)) {
+			IOBreakFlag = true;
+		}
+		
+		return retByte;
+	}
 
 	//Create a returnByte set to all 0s
 	Byte retByte = 0;

@@ -11,7 +11,7 @@ Author:
 #include "HuffmanBinaryNode.h"
 
 //Used to specify IO buffer size during IO operations
-unsigned int bufferSize = 255;
+unsigned int bufferSize = 1000000;
 
 //<summary>
 // A record used to both track frequency count and a compressed bit representation
@@ -138,7 +138,7 @@ void Decode(std::string inFileName, std::string outFileName) {
 		return;
 	}
 	if (writer->CheckEOF()) {
-		std::cout << "Unable to open/read the ouput file.\n";
+		std::cout << "Unable to open/read the output file.\n";
 		return;
 	}
 	
@@ -224,9 +224,6 @@ void Decode(std::string inFileName, std::string outFileName) {
 	reader->Close();
 	writer->Close();
 	
-	//Delete our allocated data
-	delete reader;
-	delete writer;
 	//Deleting head causes a cascade of all children to be deleted
 	delete head;
 }
@@ -245,7 +242,7 @@ void Encode(std::string inFileName, std::string outFileName) {
 		return;
 	}
 	if (writer->CheckEOF()) {
-		std::cout << "Unable to open/read the ouput file.\n";
+		std::cout << "Unable to open/read the output file.\n";
 		return;
 	}
 	
@@ -263,7 +260,7 @@ void Encode(std::string inFileName, std::string outFileName) {
 	//Loop through all bytes
 	for (unsigned int i = 0; i < 256; i++) {
 		//If this byte appears in our table as non 0
-		if (frequencyTable[i].count) {
+		if (frequencyTable[i].count > 0) {
 			//Create a new node
 			HuffmanBinaryNode* newNode = new HuffmanBinaryNode(true);
 			//Set its byte and frequency
@@ -354,19 +351,18 @@ void Encode(std::string inFileName, std::string outFileName) {
 	reader->Close();
 	writer->Close();
 	
-	//Delete our allocated data
-	delete reader;
-	delete writer;
 	//Deleting head causes a cascade of all children to be deleted
 	delete head;
 }
 
 int main(int argc, char** argv) {
+	//Check if we have the right number of arguments
 	if (argc < 3) {
 		//Report to the user that they have incorrect input.
 		std::cout << "Malformed input: Huffman <encode/decode> <InputFileName> <OutputFileName>\n";
 		return 0;
 	}
+	
 	//Store the file names for our IO methods.
 	std::string mode = argv[1];
 	std::string inFileName = argv[2];
@@ -379,7 +375,10 @@ int main(int argc, char** argv) {
 		Decode(inFileName, outFileName);
 	else
 		std::cout << "Malformed input: Huffman <encode/decode> <InputFileName> <OutputFileName>\n";
-
-	
+	//Delete our allocated data
+	if (reader)
+		delete reader;
+	if (writer)
+		delete writer;
 	return 0;
 }
