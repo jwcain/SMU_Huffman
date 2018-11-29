@@ -32,11 +32,11 @@ private:
 	//Tracks the frequency of the node (for a branch, it is the sum of its children)
 	unsigned long frequency;
 	//The UID of this node, It is automatically assigned during instantiation
-	unsigned int id; 
+	unsigned short id; 
 	
 	
 	//A static tracker for UID assignment. Also serves as total count of nodes
-	static unsigned int ID;
+	static unsigned short ID;
 public:
 	//Create a struct that stores an unfinished recreation of a node from file. It stores the partially set up node and the IDs of nodes it should be linked to 
 	struct UnfinishedHuffmanBinaryNode {
@@ -51,7 +51,7 @@ public:
 	
 	//Method descriptions are maintained in the cpp file
 	
-	unsigned int GetID();
+	unsigned short GetID();
 	bool IsLeaf();
 	unsigned long GetFrequency() const;
 	void SetFrequency(unsigned long frequencyValue);
@@ -67,7 +67,7 @@ public:
 	~HuffmanBinaryNode();
 	bool IsEOF();
 	void MarkEOF();
-	void OverrideID(unsigned int idValue);
+	void OverrideID(unsigned short idValue);
 	
 	static void Print(HuffmanBinaryNode* node);
 	static void PostOrderOperation(HuffmanBinaryNode* head, traversal_operation opr);

@@ -6,12 +6,12 @@ Author:
 */
 
 #include "HuffmanBinaryNode.h"
-unsigned int  HuffmanBinaryNode::ID = 0;
+unsigned short  HuffmanBinaryNode::ID = 0;
 
 //<summary>
 // Returns the UID for this node
 //</summary>
-unsigned int HuffmanBinaryNode::GetID() {
+unsigned short HuffmanBinaryNode::GetID() {
 	return id;
 }
 
@@ -140,7 +140,7 @@ void HuffmanBinaryNode::MarkEOF() {
 //<summary>
 // Assigns an ID to this node
 //</summary>
-void HuffmanBinaryNode::OverrideID(unsigned int idValue) {
+void HuffmanBinaryNode::OverrideID(unsigned short idValue) {
 	id = idValue;
 }
 

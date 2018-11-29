@@ -260,6 +260,38 @@ void BitwiseIO::WriteBit(Bit bit) {
 }
 
 // <summary>
+// reads out the 'amount' rightmost bits from input
+// </summary>
+unsigned short BitwiseIO::FlexRead(short amount) {
+	//Compile our result into one vlaue
+	unsigned short retValue = 0;
+	//Read in this amount of bits
+	for (short i = amount; i >= 0; i--)
+		//If we have read a positve bit
+		if (ReadBit())
+			//Or our return value with a 1 shifted to this position
+			retValue = retValue | (US_1 << i);
+			
+	return retValue;
+}
+
+// <summary>
+// Writs out the 'amount' rightmost bits of the input
+// </summary>
+void BitwiseIO::FlexWrite(short amount, unsigned short data) {
+	//Write in this amount of bits
+	for (short i = amount; i >= 0; i--)
+		//If there is a positive bit in this position
+		if (data & (US_1 << i))
+			//Write a positive bit
+			WriteBit(1);
+		else
+			//Write a negative bit
+			WriteBit(0);
+}
+
+
+// <summary>
 // Checks if we have reached an IOBreakFlag
 // </summary>
 bool BitwiseIO::CheckEOF() {

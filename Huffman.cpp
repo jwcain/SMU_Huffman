@@ -72,6 +72,8 @@ void ReverseWriteABoolVector(std::vector<bool> vector) {
 }
 
 
+
+
 //<summary>
 // Returns the binary form of this node
 //</summary>
@@ -81,17 +83,17 @@ void PackNodeToBits(HuffmanBinaryNode* node){
 	//write out isEOF as a bit
 	writer->WriteBit(node->IsEOF());
 	//write out ID as a byte
-	writer->WriteByte(node->GetID());
+	writer->FlexWrite(10,node->GetID());
 	
 	//if isLeaf
 	if (node->IsLeaf()) 
 		//write out byte representation
-		writer->WriteByte(node->GetByte());
+		writer->FlexWrite(10,node->GetByte());
 	else {
 		//Write out left child's id as a byte
-		writer->WriteByte(node->GetLeft()->GetID());
+		writer->FlexWrite(10,node->GetLeft()->GetID());
 		//Write out right child's id as a byte
-		writer->WriteByte(node->GetRight()->GetID());
+		writer->FlexWrite(10,node->GetRight()->GetID());
 	}
 }
 
@@ -109,17 +111,17 @@ HuffmanBinaryNode::UnfinishedHuffmanBinaryNode* UnpackFromBits() {
 	if (reader->ReadBit() > 0)
 		newNode->MarkEOF();
 	//Read out ID as a byte and override ID
-	newNode->OverrideID(reader->ReadByte());
+	newNode->OverrideID(reader->FlexRead(10));
 	//if isLeaf
 	if (newNode->IsLeaf()) {
 		//Read out byte representation and Set byte representation
-		newNode->SetByte(reader->ReadByte());
+		newNode->SetByte(reader->FlexRead(10));
 	}
 	else {
 		//Read out left child's id as a byte and set left ID
-		unfinishedNode->leftID = reader->ReadByte();
+		unfinishedNode->leftID = reader->FlexRead(10);
 		//Read out right child's id as a byte and Set right ID
-		unfinishedNode->rightID = reader->ReadByte();
+		unfinishedNode->rightID = reader->FlexRead(10);
 	}
 	return unfinishedNode;
 }

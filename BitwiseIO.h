@@ -60,6 +60,9 @@ public:
 	void WriteByte(Byte byte);
 	void WriteBit(Bit bit);
 	
+	unsigned short FlexRead(short amount);
+	void FlexWrite(short amount, unsigned short data);
+	
 	bool CheckEOF();
 	void Rewind();
 	void Close();
