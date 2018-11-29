@@ -260,11 +260,13 @@ void Encode(std::string inFileName, std::string outFileName) {
 	HuffmanNodePQLow nodePQ;
 
 	//Loop through all bytes
+	int uniqueByteCount = 0;
 	for (unsigned int i = 0; i < 256; i++) {
 		//If this byte appears in our table as non 0
 		if (frequencyTable[i].count > 0) {
 			//Create a new node
 			HuffmanBinaryNode* newNode = new HuffmanBinaryNode(true);
+			uniqueByteCount++;
 			//Set its byte and frequency
 			newNode->SetByte(i);
 			newNode->SetFrequency(frequencyTable[i].count);
@@ -272,6 +274,7 @@ void Encode(std::string inFileName, std::string outFileName) {
 			nodePQ.push(newNode);
 		}
 	}
+	std::cout << uniqueByteCount << "\n";
 
 	//Add the EOF character. It is the only character with Frequency of 0, so it will get the worst representation
 	{
