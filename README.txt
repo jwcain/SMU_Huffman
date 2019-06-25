@@ -1,6 +1,11 @@
 SMU Assignment 2 - Huffman encoding
 GITHUB: 	https://github.com/jwcain/SMU_Huffman
 PORTFOLIO PAGE: https://www.affinityforfun.com/huffmancompression
+AUTHOR:
+  Justin W. Cain 
+  @AffinityForFun
+  https://www.affinityforfun.com
+  jwcain@mtu.edu
 TIMELINE:
 		Init creation 		- 11/25/18
 		Finished with bugs 	- 11/26/18
@@ -27,7 +32,7 @@ USAGE:
 		Encode/decode selects that mode for execution
 		InputFileName is the target file for encoding/decoding
 		OutputFileName is the target output file and will be created/truncated
-Test Data:
+TEST DATA:
 	Deflation is the percentage remaining of original size.
 	Empty File:
 		Regular:	0
