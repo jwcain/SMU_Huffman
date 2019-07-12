@@ -1,4 +1,5 @@
 # SMU Assignment 2 - Huffman encoding
+## ## [Assingmnent Details](https://www.smu.edu/-/media/Site/guildhallOLD/Documents/Huffman_Exercise.pdf?la=en)
 ## Author
 - Justin W. Cain 
 - @AffinityForFun
