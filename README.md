@@ -1,5 +1,5 @@
 # SMU Assignment 2 - Huffman Compression/Decompression
-## ## [Assingmnent Details](https://www.smu.edu/-/media/Site/guildhallOLD/Documents/Huffman_Exercise.pdf?la=en)
+## [Assingmnent Details](https://www.smu.edu/-/media/Site/guildhallOLD/Documents/Huffman_Exercise.pdf?la=en)
 ## Author
 - Justin W. Cain 
 - @AffinityForFun
