@@ -4,7 +4,7 @@
 - Justin W. Cain 
 - @AffinityForFun
 - jwcain@mtu.edu
-- [Portfolio](jwcain.github.io/Portfolio)
+- [Portfolio](https://jwcain.github.io/Portfolio/)
 
 ## Timeline
 - Init creation 		- 11/25/18
