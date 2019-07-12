@@ -24,7 +24,7 @@ It had been a while since I last attempted Huffman Compression, with this as my 
 
 I utilized the assignment description, my most recent Huffman compression project, and a C assignment I had complete in college that contained code for bit-level IO operations.
 
-20190624_221043.jpg
+(IMAGE MISSING)
 You can see in my ever-present programming notebook that I spent time calculating the best way to store the Huffman tree inside the compressed file.
 
 There, I am debating two options; one of which is a mistake. I am remembering a method for saving tree nodes in an array, but I eventually realize the process only works for balanced, binary trees. I decide on a fixed-size format for saving nodes, saving child-IDs or original byte data in the appropriate context.
