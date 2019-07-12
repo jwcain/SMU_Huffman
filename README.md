@@ -25,11 +25,22 @@ It had been a while since I last attempted Huffman Compression, with this as my 
 I utilized the assignment description, my most recent Huffman compression project, and a C assignment I had complete in college that contained code for bit-level IO operations.
 
 (IMAGE MISSING)
+
 You can see in my ever-present programming notebook that I spent time calculating the best way to store the Huffman tree inside the compressed file.
 
 There, I am debating two options; one of which is a mistake. I am remembering a method for saving tree nodes in an array, but I eventually realize the process only works for balanced, binary trees. I decide on a fixed-size format for saving nodes, saving child-IDs or original byte data in the appropriate context.
 
 Now confident with my process, I prioritize creating the data-structures for the program; compression, decompression, and IO operations use these data structures, making them the core coupling point for the program.
+
+When writing my data structures, I assumed that run-time memory usage was non-critical and saved essential data in the smallest possible form.
+
+(IMAGE MISSING)
+
+My next goal was writing a helper class to manage bit-level IO operations, therefore abstracting away complexity from the algorithm.
+
+I think it is worth mentioning a decision I made while testing decompression.  I tested decompression using data-in-memory from compression. Doing this separated the tasks, and inevitable bugs, of decompression and reconstruction of the Huffman tree, allowing me to develop them independently.
+
+Finally, I iterated on commenting, reordering processes to higher-order logic, and restructuring the code for readability and flow.
 
 ## PROJECT STRUCTURE
 Written in c++ standard 11, utilizing standard library string and IO
