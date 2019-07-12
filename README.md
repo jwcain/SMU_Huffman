@@ -28,6 +28,8 @@ I utilized the assignment description, my most recent Huffman compression projec
 When writing my data structures, I assumed that run-time memory usage was non-critical and saved essential data in the smallest possible form.
 
 ![Binary Node Code](Images/HuffmanCompression_NodeData.PNG)
+
+
 ![Saving Binary Nodes](Images/HuffmanCompression_NodePacking.PNG)
 
 My next goal was writing a helper class to manage bit-level IO operations, therefore abstracting away complexity from the algorithm.
