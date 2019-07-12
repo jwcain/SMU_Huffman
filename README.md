@@ -3,8 +3,8 @@
 ## Author
 - Justin W. Cain 
 - @AffinityForFun
-- https://www.affinityforfun.com
 - jwcain@mtu.edu
+- jwcain.github.io/Portfolio
 
 ## Timeline
 - Init creation 		- 11/25/18
