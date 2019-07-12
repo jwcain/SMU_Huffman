@@ -50,14 +50,13 @@ Overall, I am happy with the results of this task. I believe it demonstrates tha
 On reflection, it seems my knowledge of C++ standard libraries may be lacking; I have a suspicion some of my code may be simplifiable with their help. In these situations, I err towards using the coding practices and techniques with which I am most comfortable; I believe it is better to produce code I understand fully and can explain, rather than sacrifice that integrity for speed or ease of production.
 
 ## Structure
-Written in c++ standard 11, utilizing standard library string and IO
-Included files "BitwiseIO.cpp", "BitwiseIO.h", "Huffman.cpp". "HuffmanBinaryNode.cpp", 
-"HuffmanBinaryNode.n" and "makefile"
-All code is stored in root directory of project
-The main method for execution is located in Huffman.cpp
-A Makefile is provided to compile the program.
-The program is compiled to "Huffman"
-Arguments are taken from the command line, no other user input is taken
+- Written in c++ standard 11, utilizing standard library string and IO
+- Included files "BitwiseIO.cpp", "BitwiseIO.h", "Huffman.cpp", "HuffmanBinaryNode.cpp", "HuffmanBinaryNode.n", and "makefile"
+- All code is stored in root directory of project
+- The main method for execution is located in Huffman.cpp
+- A Makefile is provided to compile the program.
+- The program is compiled to "Huffman"
+- Arguments are taken from the command line, no other user input is taken
 
 ## Usage
 ```
