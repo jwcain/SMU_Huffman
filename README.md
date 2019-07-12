@@ -25,7 +25,7 @@ It had been a while since I last attempted Huffman Compression, with this as my 
 
 I utilized the assignment description, my most recent Huffman compression project, and a C assignment I had complete in college that contained code for bit-level IO operations.
 
-(IMAGE MISSING)
+![Notebook Image](Images/20190624_221043.jpg)
 
 You can see in my ever-present programming notebook that I spent time calculating the best way to store the Huffman tree inside the compressed file.
 
@@ -35,7 +35,8 @@ Now confident with my process, I prioritize creating the data-structures for the
 
 When writing my data structures, I assumed that run-time memory usage was non-critical and saved essential data in the smallest possible form.
 
-(IMAGE MISSING)
+![Binary Node Code](Images/HuffmanCompression_NodeData.PNG)
+![Saving Binary Nodes](Images/HuffmanCompression_NodePacking.PNG)
 
 My next goal was writing a helper class to manage bit-level IO operations, therefore abstracting away complexity from the algorithm.
 
