@@ -1,19 +1,19 @@
 # SMU Assignment 2 - Huffman encoding
-## AUTHOR
+## Author
 - Justin W. Cain 
 - @AffinityForFun
 - https://www.affinityforfun.com
 - jwcain@mtu.edu
 
-## TIMELINE
+## Timeline
 - Init creation 		- 11/25/18
 - Finished with bugs 	- 11/26/18
 - Finished		- 11/27/18
 
-## PURPOSE
+## Purpose
 This project is assignment 2 for the SMU Masters of Interactive Technology application process. It is a Huffman compression implementation. I attempted this assignment feeling that my portfolio lacked good C++ projects. I decided if this assignment is valuable to SMU Guildhall's application process, then it is a worthwhile addition to my portfolio.
 	
-## PROCESS
+## Process
 It had been a while since I last attempted Huffman Compression, with this as my first time doing byte-compression instead of text-compression (compressing words into small strings of characters). Generally, I followed this process:
 
 - Gather information.
@@ -42,13 +42,13 @@ I think it is worth mentioning a decision I made while testing decompression.  I
 
 Finally, I iterated on commenting, reordering processes to higher-order logic, and restructuring the code for readability and flow.
 
-## REFLECTION
+## Reflection
 
 Overall, I am happy with the results of this task. I believe it demonstrates that I am comfortable with higher-level algorithmic processes. 
 
 On reflection, it seems my knowledge of C++ standard libraries may be lacking; I have a suspicion some of my code may be simplifiable with their help. In these situations, I err towards using the coding practices and techniques with which I am most comfortable; I believe it is better to produce code I understand fully and can explain, rather than sacrifice that integrity for speed or ease of production.
 
-## PROJECT STRUCTURE
+## Structure
 Written in c++ standard 11, utilizing standard library string and IO
 Included files "BitwiseIO.cpp", "BitwiseIO.h", "Huffman.cpp". "HuffmanBinaryNode.cpp", 
 "HuffmanBinaryNode.n" and "makefile"
@@ -58,7 +58,7 @@ A Makefile is provided to compile the program.
 The program is compiled to "Huffman"
 Arguments are taken from the command line, no other user input is taken
 
-## USAGE
+## Usage
 ```
 	Huffman <encode/decode> <InputFileName> <OutputFileName>
 		Encode/decode selects that mode for execution
@@ -66,7 +66,7 @@ Arguments are taken from the command line, no other user input is taken
 		OutputFileName is the target output file and will be created/truncated
 ```
 
-## TEST DATA
+## Test Data
 	Deflation is the percentage remaining of original size.
 	Empty File:
 		Regular:	0
