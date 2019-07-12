@@ -42,6 +42,12 @@ I think it is worth mentioning a decision I made while testing decompression.  I
 
 Finally, I iterated on commenting, reordering processes to higher-order logic, and restructuring the code for readability and flow.
 
+## REFLECTION
+
+Overall, I am happy with the results of this task. I believe it demonstrates that I am comfortable with higher-level algorithmic processes. 
+
+On reflection, it seems my knowledge of C++ standard libraries may be lacking; I have a suspicion some of my code may be simplifiable with their help. In these situations, I err towards using the coding practices and techniques with which I am most comfortable; I believe it is better to produce code I understand fully and can explain, rather than sacrifice that integrity for speed or ease of production.
+
 ## PROJECT STRUCTURE
 Written in c++ standard 11, utilizing standard library string and IO
 Included files "BitwiseIO.cpp", "BitwiseIO.h", "Huffman.cpp". "HuffmanBinaryNode.cpp", 
