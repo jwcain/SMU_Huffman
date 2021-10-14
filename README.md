@@ -2,9 +2,8 @@
 ## [Assingmnent Details](https://www.smu.edu/-/media/Site/guildhallOLD/Documents/Huffman_Exercise.pdf?la=en)
 ## Author
 - Justin W. Cain 
-- @AffinityForFun
-- jwcain@mtu.edu
-- [Portfolio](https://jwcain.github.io/Portfolio/)
+- contact@justinwcain.com
+- [Portfolio](https://www.justinwcain.com)
 
 ## Timeline
 - Init creation 		- 11/25/18
